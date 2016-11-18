@@ -24,6 +24,8 @@ import java.util.logging.Logger;
  */
 public class Servidor {
     
+    int teste; 
+    
     public static Map<Long, Product> activeAuctions = new HashMap<Long, Product>();
     public static Map<String, InterfaceCli> activeClients = new HashMap<String, InterfaceCli>();
     
