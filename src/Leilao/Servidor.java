@@ -12,7 +12,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +25,6 @@ import java.util.logging.Logger;
  * @author stephany
  */
 public class Servidor {
-    
-    int teste; 
     
     public static Map<Long, Product> activeAuctions = new HashMap<Long, Product>();
     public static Map<String, InterfaceCli> activeClients = new HashMap<String, InterfaceCli>();
@@ -47,6 +47,25 @@ public class Servidor {
     public Map getActiveClients()
     {
         return Servidor.activeClients;
+    }
+    
+    public void notificaTodos(String mensagem){
+        Collection<InterfaceCli> interfaces = activeClients.values();
+        
+        for (InterfaceCli refObjCli : interfaces) {
+            
+            System.out.println("tem referenciiiiiia: " + refObjCli );
+            try {
+                refObjCli.receberNotificacao(mensagem);
+            } catch (RemoteException ex) {
+                /* Se caiu aqui, provavelmente o cliente fechou sua plataforma
+                 * Pois tem a referencia dele mapeada, mas não foi possível enviar a mensagem
+                 *  através do canal de comunicação
+                 */
+                System.out.println("REMOTE EXCEPTION: Não conseguiu enviar ao usuário mensagem assíncrona");
+                Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**

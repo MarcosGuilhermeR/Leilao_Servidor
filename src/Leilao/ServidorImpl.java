@@ -77,6 +77,9 @@ public class ServidorImpl extends UnicastRemoteObject implements InterfaceServ, 
     public synchronized boolean cadastrarProduto(long productCod, String name, String description, double beginPrice, int timeauction, String sellerName) throws RemoteException {
         Product prod = new Product(productCod, name, description, beginPrice, timeauction, sellerName);
         Servidor server = new Servidor();
+        
+        server.notificaTodos("atualizar");
+        
         return server.mapActiveAuctions(prod);
     }
 
